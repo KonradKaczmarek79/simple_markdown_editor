@@ -1,13 +1,15 @@
-markdown_text = """# John Lennon
+command = None
 
-or ***John Winston Ono Lennon*** was one of *The Beatles*.
+def display_help():
+    print("Available formatters: plain bold italic header link inline-code ordered-list unordered-list new-line",
+          "Special commands: !help !done", sep="\n")
 
-Here are the songs he wrote I like the most:
+keywords = {"!done", "plain", "bold", "italic", "header", "link", "inline-code", "ordered-list", "unordered-list", "new-line"}
 
-* Imagine
-* Norwegian Wood
-* Come Together
-* In My Life
-* ~~Hey Jude~~ (that was *McCartney*)"""
+while command != "!done":
+    command = input("Choose a formatter: ")
 
-print(markdown_text)
+    if command == "!help":
+        display_help()
+    elif command not in keywords:
+        print("Unknown formatting type or command")
