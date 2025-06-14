@@ -1,21 +1,25 @@
+# write your code here
 command = None
+
 
 def display_help():
     print("Available formatters: plain bold italic header link inline-code ordered-list unordered-list new-line",
           "Special commands: !help !done", sep="\n")
 
+
 keywords = {"!done", "plain", "bold", "italic", "header", "link", "inline-code",
-            # "ordered-list", "unordered-list",
+            "ordered-list", "unordered-list",
             "new-line"}
+
 
 def add_new_text(new_text: str, current_text: str):
     if current_text:
         if new_text.startswith("#") and not current_text.endswith("\n"):
             new_text = "\n" + new_text
-        # elif not current_text.endswith(" ") and not current_text.endswith("\n"):
-        #     new_text = " " + new_text
-        return current_text + new_text # if not new_text.startswith("#") else current_text + "\n" + new_text
+
+        return current_text + new_text
     return new_text
+
 
 def header_formatter():
     while True:
@@ -30,25 +34,57 @@ def header_formatter():
         except ValueError:
             print("The level should be within the range of 1 to 6")
 
+
 def link_formatter():
     label = input("Label: ")
     url = input("URL: ")
     return f"[{label}]({url})"
 
+
 def newline_formatter():
     return "\n"
+
 
 def bold_formatter():
     return f"**{input('Text: ')}**"
 
+
 def italic_formatter():
     return f"*{input('Text: ')}*"
+
 
 def plain_text_formatter():
     return f"{input('Text: ')}"
 
+
 def inline_code_formatter():
     return f"`{input('Text: ')}`"
+
+
+def list_formatter(ordered: bool = False):
+    while True:
+        rows = input("Number of rows: ")
+        try:
+            rows = int(rows)
+            if rows < 1:
+                raise ValueError
+
+            result = ""
+
+            for x in range(1, rows + 1):
+
+                text = input(f"Row #{x}: ")
+
+                if not ordered:
+                    prefix = f"{x}. "
+                else:
+                    prefix = f"* "
+                result += f"{prefix}{text}\n"
+
+            return result
+        except ValueError:
+            print("The number of rows should be greater than zero")
+
 
 formatters = {
     "header": header_formatter,
@@ -58,6 +94,7 @@ formatters = {
     "italic": italic_formatter,
     "plain": plain_text_formatter,
     "inline-code": inline_code_formatter,
+    "ordered-list": list_formatter,
 }
 
 formatted_text = ""
@@ -72,6 +109,6 @@ while command != "!done":
     elif command not in keywords:
         print("Unknown formatting type or command")
     else:
-        new_formated_text = formatters[command]()
+        new_formated_text = formatters[command]() if command != "unordered-list" else list_formatter(True)
         formatted_text = add_new_text(new_formated_text, formatted_text)
         print(formatted_text)
