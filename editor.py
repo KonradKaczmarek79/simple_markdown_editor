@@ -1,16 +1,13 @@
 # write your code here
 command = None
 
-
 def display_help():
     print("Available formatters: plain bold italic header link inline-code ordered-list unordered-list new-line",
           "Special commands: !help !done", sep="\n")
 
-
 keywords = {"!done", "plain", "bold", "italic", "header", "link", "inline-code",
             "ordered-list", "unordered-list",
             "new-line"}
-
 
 def add_new_text(new_text: str, current_text: str):
     if current_text:
@@ -19,7 +16,6 @@ def add_new_text(new_text: str, current_text: str):
 
         return current_text + new_text
     return new_text
-
 
 def header_formatter():
     while True:
@@ -34,32 +30,25 @@ def header_formatter():
         except ValueError:
             print("The level should be within the range of 1 to 6")
 
-
 def link_formatter():
     label = input("Label: ")
     url = input("URL: ")
     return f"[{label}]({url})"
 
-
 def newline_formatter():
     return "\n"
-
 
 def bold_formatter():
     return f"**{input('Text: ')}**"
 
-
 def italic_formatter():
     return f"*{input('Text: ')}*"
-
 
 def plain_text_formatter():
     return f"{input('Text: ')}"
 
-
 def inline_code_formatter():
     return f"`{input('Text: ')}`"
-
 
 def list_formatter(ordered: bool = False):
     while True:
@@ -85,6 +74,11 @@ def list_formatter(ordered: bool = False):
         except ValueError:
             print("The number of rows should be greater than zero")
 
+def save_result_to_file(text_to_save: str):
+    with open("output.md", "w", encoding="utf-8") as f:
+        f.write(text_to_save)
+
+
 
 formatters = {
     "header": header_formatter,
@@ -103,6 +97,7 @@ while command != "!done":
     command = input("Choose a formatter: ")
 
     if command == "!done":
+        save_result_to_file(formatted_text)
         continue
     elif command == "!help":
         display_help()
@@ -112,3 +107,4 @@ while command != "!done":
         new_formated_text = formatters[command]() if command != "unordered-list" else list_formatter(True)
         formatted_text = add_new_text(new_formated_text, formatted_text)
         print(formatted_text)
+
